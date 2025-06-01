@@ -1,4 +1,4 @@
-// codeService.js
+
 const { createClient } = require("@supabase/supabase-js");
 
 const supabase = createClient(
@@ -6,11 +6,11 @@ const supabase = createClient(
   process.env.SUPABASE_KEY
 );
 
-// 1. Gerar e salvar código
+// gerar e salvar codigo
 async function saveCode(email, code) {
-  const expiresAt = new Date(Date.now() + 15 * 60 * 1000); // expira em 15 minutos
+  const expiresAt = new Date(Date.now() + 15 * 60 * 1000); 
 
-  // Apaga códigos antigos para esse e-mail
+  
   await supabase
     .from("password_reset_codes")
     .delete()
@@ -31,7 +31,7 @@ async function saveCode(email, code) {
   }
 }
 
-// 2. Verificar código
+// verificar codigo
 async function verifyCode(email, code) {
   const { data, error } = await supabase
     .from("password_reset_codes")
@@ -48,7 +48,7 @@ async function verifyCode(email, code) {
   return now < expiresAt;
 }
 
-// 3. Marcar como usado
+// marcar como usado
 async function markCodeAsUsed(email, code) {
   await supabase
     .from("password_reset_codes")

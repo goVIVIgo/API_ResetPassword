@@ -1,13 +1,13 @@
 const express = require('express');
-const supabase = require('./supabaseClient'); // Cliente Supabase configurado
-const { sendCodeEmail, sendConfirmationEmail } = require('./mailer'); // Função para enviar e-mail
+const supabase = require('./supabaseClient'); 
+const { sendCodeEmail, sendConfirmationEmail } = require('./mailer'); 
 
 const app = express();
 app.use(express.json());
 
-const verificationCodes = new Map(); // email => { code, expiresAt }
+const verificationCodes = new Map(); 
 
-// Endpoint para validar se o e-mail existe no Supabase Auth
+
 app.post('/validate-email', async (req, res) => {
   const { email } = req.body;
   console.log('Validando email:', email);
@@ -60,11 +60,11 @@ app.post('/send-code', async (req, res) => {
     }
 
     const code = Math.floor(100000 + Math.random() * 900000).toString();
-    const expiresAt = Date.now() + 10 * 60 * 1000; // Código expira em 10 min
+    const expiresAt = Date.now() + 10 * 60 * 1000; 
 
     verificationCodes.set(email, { code, expiresAt });
 
-    await sendCodeEmail(email, code); // Envia o código por e-mail
+    await sendCodeEmail(email, code); 
 
     console.log(`Código ${code} enviado para ${email}`);
     res.json({ message: 'Código enviado para o e-mail' });
@@ -130,9 +130,9 @@ app.post('/update-password', async (req, res) => {
       return res.status(500).json({ message: 'Erro ao atualizar senha' });
     }
 
-    verificationCodes.delete(email); // Apaga o código após uso
+    verificationCodes.delete(email); 
 
-    await sendConfirmationEmail(email); // Envia confirmação de senha alterada
+    await sendConfirmationEmail(email); 
 
     console.log(`Senha atualizada para ${email}`);
 
